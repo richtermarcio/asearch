@@ -15,22 +15,27 @@ import asearch.base.Artigo;
  *
  */
 public class EntradaBaseIndice implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6034529797928854302L;
 	private String termo;
 	private Collection<OcorrenciaTermoDocumento> ocorrencias = new HashSet<OcorrenciaTermoDocumento>();
 	private Hashtable hashOcorrencias = new Hashtable();
 	
 	private int ocorrenciasNaBase;
 	
-	public void adcionarOcorrência(Artigo artigo) {
+	public OcorrenciaTermoDocumento adcionarOcorrência(Artigo artigo) {
 		OcorrenciaTermoDocumento ocorrencia = getOcorrencia(artigo);
 		ocorrencia.setTermo(this);
 		ocorrencia.setArtigo(artigo);
 		ocorrencia.incFrequencia();
 		ocorrencias.add(ocorrencia);
 		++ocorrenciasNaBase;
+		return ocorrencia;
 	}
 	
-	private OcorrenciaTermoDocumento getOcorrencia(Artigo artigo) {
+	public OcorrenciaTermoDocumento getOcorrencia(Artigo artigo) {
 		OcorrenciaTermoDocumento entrada = (OcorrenciaTermoDocumento) hashOcorrencias.get(artigo); 
 		if (entrada == null) {
 			entrada = new OcorrenciaTermoDocumento();
@@ -53,6 +58,10 @@ public class EntradaBaseIndice implements Serializable {
 	}
 	public int getOcorrenciasNaBase() {
 		return ocorrencias.size();
+	}
+
+	public double getIDF() {
+		return Math.log(Indexador.getBase().getArtigos().size() / getOcorrenciasNaBase());	
 	}
 	
 	public String toString() {

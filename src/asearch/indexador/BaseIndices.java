@@ -16,16 +16,43 @@ import asearch.base.Artigo;
  *
  */
 public class BaseIndices implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5167408274116070341L;
 	private Collection<EntradaBaseIndice> entradas = new HashSet<EntradaBaseIndice>();
 	private Hashtable hashEntradas = new Hashtable();
+	private Collection<Artigo> artigos = new HashSet<Artigo>();
+	
+	public static boolean LOG = false;
+	
+	public static void log(String str) {
+		if (LOG) {
+			System.out.println(str);
+		}
+	}
 	
 	public void indexar(Artigo artigo) {
-		for (String palavra : artigo.getConteudoPreparado()) {
-			System.out.println("indexando palavra " + palavra);
-			EntradaBaseIndice entrada = getPalavra(palavra);
-			entrada.setTermo(palavra);
-			entrada.adcionarOcorrência(artigo);
-			entradas.add(entrada);
+		if (!artigos.contains(artigo)) {
+			int maxFreq = 0;
+			for (String palavra : artigo.getConteudoPreparado()) {
+				log("indexando palavra " + palavra);
+				EntradaBaseIndice entrada = getPalavra(palavra);
+				entrada.setTermo(palavra);
+				OcorrenciaTermoDocumento ocorrencia = entrada
+						.adcionarOcorrência(artigo);
+				entradas.add(entrada);
+
+				artigo.addPalavra(ocorrencia);
+
+				int freq = ocorrencia.getFrequencia();
+				if (freq > maxFreq) {
+					maxFreq = freq;
+				}
+			}
+
+			artigo.setFrequenciaTermoMaisFrequente(maxFreq);
+			artigos.add(artigo);
 		}
 	} 
 	
@@ -47,5 +74,21 @@ public class BaseIndices implements Serializable {
 		}
 		ret += "\n";
 		return ret;
+	}
+
+	public Collection<Artigo> getArtigos() {
+		return artigos;
+	}
+
+	public void atualizarPesos() {
+		for (EntradaBaseIndice entrada : entradas) {
+			for (OcorrenciaTermoDocumento ocorrencia : entrada.getOcorrencias()) {
+				ocorrencia.atualizarPeso();
+			}
+		}
+	}
+
+	public Collection<EntradaBaseIndice> getEntradas() {
+		return entradas;
 	}
 }

@@ -12,14 +12,24 @@ import asearch.base.Artigo;
  *
  */
 public class OcorrenciaTermoDocumento implements Serializable  {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6891630907769956982L;
 	private EntradaBaseIndice termo;
 	private Artigo 			  artigo;
 	private int    			  frequenciaDaPalavraNoDocumento;
 	
 	private double 			  peso;
+	private double			  tf;
 
 	public EntradaBaseIndice getTermo() {
 		return termo;
+	}
+
+	public void atualizarPeso() {
+		tf  = (frequenciaDaPalavraNoDocumento * 1.0)/ artigo.getFrequenciaTermoMaisFrequente();
+		peso = tf * termo.getIDF();
 	}
 
 	public void setTermo(EntradaBaseIndice termo) {

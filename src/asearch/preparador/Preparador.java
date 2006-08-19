@@ -86,11 +86,12 @@ public class Preparador {
 	// propriedades podem ser importantes na busca.
 
 	private static Artigo lerArtigo(File arquivo) throws IOException {
+		PDDocument pdf = null;
 		Artigo artigo = new Artigo();
 		try {
 
 			artigo.setNomeArquivo(arquivo.getName());
-			PDDocument pdf = PDDocument.load(arquivo);
+			pdf = PDDocument.load(arquivo);
 
 			// tenta decriptar com senha vazia.
 			if (pdf.isEncrypted()) {
@@ -107,13 +108,22 @@ public class Preparador {
 			artigo.setAutor(info.getAuthor());
 
 			// TODO verificar se esses toString em datas vão formatá-las.
-			if (info.getCreationDate() != null) {
-				artigo.setDataCriacao(info.getCreationDate().toString());
+			try { // se a data é inválida ele joga exceção :S:S:S
+				if (info.getCreationDate() != null) {
+					artigo.setDataCriacao(info.getCreationDate().toString());
+				}
+			} catch (Exception e) {
+				
 			}
-			if (info.getModificationDate() != null) {
-				artigo
-						.setDataModificacao(info.getModificationDate()
-								.toString());
+			
+			try { // se a data é inválida ele joga exceção :S:S:S
+				if (info.getModificationDate() != null) {
+					artigo
+					.setDataModificacao(info.getModificationDate()
+							.toString());
+				}
+			} catch (Exception e) {
+
 			}
 			artigo.setPalavrasChaves(info.getKeywords());
 			artigo.setProdutor(info.getProducer());
@@ -125,6 +135,10 @@ public class Preparador {
 
 		} catch (InvalidPasswordException e) {
 			throw new IOException(" O artigo necessita de senha.");
+		} finally {
+			if (pdf != null) {
+				pdf.close();
+			}
 		}
 		return artigo;
 

@@ -2,9 +2,17 @@ package asearch.base;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
+
+import asearch.indexador.OcorrenciaTermoDocumento;
 
 public class Artigo implements Serializable {
 	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4359259001771750119L;
 	private int frequenciaTermoMaisFrequente;
 	private String nomeArquivo;
 	private String conteudo;
@@ -18,6 +26,7 @@ public class Artigo implements Serializable {
 	private String separadorPalavras;
 	private String titulo;
 	private Collection<String> conteudoPreparado;
+	private Collection<OcorrenciaTermoDocumento> palavras = new HashSet<OcorrenciaTermoDocumento>();
 	
 	public String getAssunto() {
 		return assunto;
@@ -104,8 +113,24 @@ public class Artigo implements Serializable {
 			   "\nassunto: " + assunto +			   
 			   "\ntrapped: " + trapped +
 			   "\nseparadorPalavras: " + separadorPalavras +
-			   "\ntitulo: " + titulo + "\n";		
+			   "\ntitulo: " + titulo + 
+			   "\nfrequenciaTermoMaisFrequente: " + frequenciaTermoMaisFrequente + 
+			   "\npalavras: " + palavras + "\n";		
 		
+	}
+	public int getFrequenciaTermoMaisFrequente() {
+		return frequenciaTermoMaisFrequente;
+	}
+	public void setFrequenciaTermoMaisFrequente(int frequenciaTermoMaisFrequente) {
+		this.frequenciaTermoMaisFrequente = frequenciaTermoMaisFrequente;
+	}
+	public Collection<OcorrenciaTermoDocumento> getPalavras() {
+		return palavras;
+	}
+	public void addPalavra(OcorrenciaTermoDocumento ocorrencia) {
+		if (!palavras.contains(ocorrencia)) {
+			palavras.add(ocorrencia);
+		}
 	}
 
 }

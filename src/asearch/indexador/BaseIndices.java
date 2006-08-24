@@ -57,7 +57,7 @@ public class BaseIndices implements Serializable {
 	} 
 	
 	//du bist schön  
-	private EntradaBaseIndice getPalavra(String palavra) {
+	public EntradaBaseIndice getPalavra(String palavra) {
 		EntradaBaseIndice entrada = (EntradaBaseIndice) hashEntradas.get(palavra); 
 		if (entrada == null) {
 			entrada = new EntradaBaseIndice();
@@ -88,7 +88,22 @@ public class BaseIndices implements Serializable {
 		}
 	}
 
+	/**
+	 * atualiza pesos considerando que a base atual e uma base "de consulta"
+	 * e a passada eh a principal
+	 *  
+	 * @param base
+	 */
+	public void atualizarPesos(BaseIndices base) {
+		for (EntradaBaseIndice entrada : entradas) {
+			for (OcorrenciaTermoDocumento ocorrencia : entrada.getOcorrencias()) {
+				ocorrencia.atualizarPeso(base);
+			}
+		}		
+	}
+
 	public Collection<EntradaBaseIndice> getEntradas() {
 		return entradas;
 	}
+
 }

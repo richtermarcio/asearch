@@ -25,6 +25,14 @@ public class Preparador {
 		return artigo;
 	}
 
+
+	public static Artigo prepararConsulta(String consulta) throws IOException {
+		Artigo consultaArtigo = new Artigo();
+		consultaArtigo.setConteudo(consulta);
+		eliminarStopWords(consultaArtigo);
+		return consultaArtigo;
+	}
+
 	// elimina todas as stop words do conteúdo de um Artigo e
 	// coloca o conteúdo filtrado na propriedade conteudoPreparado
 	// do mesmo Artigo.

@@ -32,6 +32,11 @@ public class OcorrenciaTermoDocumento implements Serializable  {
 		peso = tf * termo.getIDF();
 	}
 
+	public void atualizarPeso(BaseIndices base) {
+		tf  = 0.5 + (0.5 + frequenciaDaPalavraNoDocumento)/ artigo.getFrequenciaTermoMaisFrequente();
+		peso = tf * base.getPalavra(termo.getTermo()).getIDF();	
+	}
+
 	public void setTermo(EntradaBaseIndice termo) {
 		this.termo = termo;
 	}
@@ -55,4 +60,5 @@ public class OcorrenciaTermoDocumento implements Serializable  {
 	public String toString() {
 		return "(" + termo.getTermo() + ";" + artigo.getNomeArquivo() + ";freq=" + frequenciaDaPalavraNoDocumento + ";peso=" + peso + ")";
 	}
+
 }

@@ -15,16 +15,16 @@ public class Artigo implements Serializable {
 	private static final long serialVersionUID = 4359259001771750119L;
 	private int frequenciaTermoMaisFrequente;
 	private String nomeArquivo;
-	private String conteudo;
-	private String dataCriacao;
-	private String autor;
-	private String palavrasChaves;
-	private String dataModificacao;
-	private String produtor;
-	private String assunto;
-	private String trapped;
-	private String separadorPalavras;
-	private String titulo;
+	private String conteudo = "";
+	private String dataCriacao = "";
+	private String autor = "";
+	private String palavrasChaves = "";
+	private String dataModificacao = "";
+	private String produtor = "";
+	private String assunto = "";
+	private String trapped = "";
+	private String separadorPalavras = " ";
+	private String titulo = "";
 	private Collection<String> conteudoPreparado;
 	private Collection<OcorrenciaTermoDocumento> palavras = new HashSet<OcorrenciaTermoDocumento>();
 	

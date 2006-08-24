@@ -68,4 +68,5 @@ public class EntradaBaseIndice implements Serializable {
 		String ret = "\ttermo: " + termo+"\n\t ocorrencias na base: "+ocorrenciasNaBase;
 		return ret + ocorrencias;
 	}
+
 }

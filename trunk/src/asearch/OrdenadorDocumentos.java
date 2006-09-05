@@ -1,6 +1,7 @@
 package asearch;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,10 +37,21 @@ public class OrdenadorDocumentos {
 			String consulta = br.readLine();
 
 			long before = System.currentTimeMillis();
-			printResultado(OrdenadorDocumentos
-					.ordenarDocumentos(RecuperadorDocumentos
-							.recuperarDocumento(PreparadorConsultas
-									.calcularPesosConsulta(consulta))));
+			if (consulta.charAt(0) == '#') {
+				try {
+				printResultado(OrdenadorDocumentos
+						.ordenarDocumentos(RecuperadorDocumentos
+								.recuperarDocumento(PreparadorConsultas
+										.calcularPesosArtigo("C:\\temp\\maas\\asearch\\pdfs\\" + consulta.substring(1)))));
+				} catch (FileNotFoundException fnf) {
+					System.out.println("\nFILE NOT FOUND!!!\n");
+				}
+			} else {
+				printResultado(OrdenadorDocumentos
+						.ordenarDocumentos(RecuperadorDocumentos
+								.recuperarDocumento(PreparadorConsultas
+										.calcularPesosConsulta(consulta))));				
+			}
 
 			System.out.println("Response time: "
 					+ (System.currentTimeMillis() - before) / 1000.0 + "s");

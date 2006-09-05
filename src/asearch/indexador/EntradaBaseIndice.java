@@ -61,7 +61,7 @@ public class EntradaBaseIndice implements Serializable {
 	}
 
 	public double getIDF() {
-		return Math.log(Indexador.getBase().getArtigos().size() / getOcorrenciasNaBase());	
+		return Math.log((double)Indexador.getBase().getArtigos().size() / getOcorrenciasNaBase());	
 	}
 	
 	public String toString() {

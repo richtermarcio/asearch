@@ -69,8 +69,14 @@ public class ProcessoOffline {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
-		indexarDiretorio(new File("C:\\temp\\maas\\asearch\\pdfs\\"), true);
-		Indexador.salvarBaseIndices("base.asr");
+//		indexarDiretorio(new File("C:\\temp\\maas\\asearch\\pdfs\\"), true);
+//		Indexador.salvarBaseIndices("base.asr");
+		analisarBase("base.asr");
+	}
+	
+	
+	private static void analisarBase(String file) throws IOException, ClassNotFoundException {
+		Indexador.carregarBaseIndices(file);
 		
 		System.out.println("recalculando pesos");
 		start();
@@ -103,8 +109,10 @@ public class ProcessoOffline {
 		for(int i =0;i<palavras.length && i<20;++i) {
 			System.out.println((i+1) + ") " + palavras[i].getTermo() + " \t " + palavras[i].getIDF());
 		}
+		
 	}
-	
+
+
 	private static class ComparaFrequencia implements Comparator<EntradaBaseIndice> {
 		public int compare(EntradaBaseIndice arg0, EntradaBaseIndice arg1) {
 			return arg1.getOcorrenciasNaBase() - arg0.getOcorrenciasNaBase();

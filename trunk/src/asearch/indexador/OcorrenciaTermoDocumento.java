@@ -61,4 +61,8 @@ public class OcorrenciaTermoDocumento implements Serializable  {
 		return "(" + termo.getTermo() + ";" + artigo.getNomeArquivo() + ";freq=" + frequenciaDaPalavraNoDocumento + ";peso=" + peso + ")";
 	}
 
+	public double getPeso() {
+		return peso;
+	}
+
 }

@@ -104,18 +104,19 @@ public class Artigo implements Serializable {
 	public String toString() {
 		return "Artigo@"+ hashCode() + ":: " +		
 			   "\nnomeArquivo: " + nomeArquivo +
-			   "\nconteudo: " + conteudo +
-			   "\ndataCriacao: " + dataCriacao +
-			   "\nautor: " + autor +
-			   "\npalavrasChaves: " + palavrasChaves +
-			   "\ndataModificacao: " + dataModificacao +
-			   "\nprodutor: " + produtor +
-			   "\nassunto: " + assunto +			   
-			   "\ntrapped: " + trapped +
-			   "\nseparadorPalavras: " + separadorPalavras +
-			   "\ntitulo: " + titulo + 
+//			   "\nconteudo: " + conteudo +
+//			   "\ndataCriacao: " + dataCriacao +
+//			   "\nautor: " + autor +
+//			   "\npalavrasChaves: " + palavrasChaves +
+//			   "\ndataModificacao: " + dataModificacao +
+//			   "\nprodutor: " + produtor +
+//			   "\nassunto: " + assunto +			   
+//			   "\ntrapped: " + trapped +
+//			   "\nseparadorPalavras: " + separadorPalavras +
+//			   "\ntitulo: " + titulo + 
 			   "\nfrequenciaTermoMaisFrequente: " + frequenciaTermoMaisFrequente + 
-			   "\npalavras: " + palavras + "\n";		
+			   "\npalavras: " + palavras +
+			   "\n";		
 		
 	}
 	public int getFrequenciaTermoMaisFrequente() {

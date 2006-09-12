@@ -69,9 +69,9 @@ public class ProcessoOffline {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
-		indexarDiretorio(new File("C:\\temp\\maas\\asearch\\pdfs\\"), true);
-		Indexador.salvarBaseIndices("base.asr");
-		analisarBase("base.asr");
+		indexarDiretorio(new File("C:\\Documents and Settings\\maas\\Desktop\\asearch\\asearch_svn\\pdfs"), true);
+		Indexador.salvarBaseIndices("base2.asr");
+		analisarBase("base2.asr");
 	}
 	
 	

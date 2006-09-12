@@ -1,5 +1,6 @@
 package asearch.base;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,6 +15,7 @@ public class Artigo implements Serializable {
 	 */
 	private static final long serialVersionUID = 4359259001771750119L;
 	private int frequenciaTermoMaisFrequente;
+	private File   file;
 	private String nomeArquivo;
 	private String conteudo = "";
 	private String dataCriacao = "";
@@ -132,6 +134,12 @@ public class Artigo implements Serializable {
 		if (!palavras.contains(ocorrencia)) {
 			palavras.add(ocorrencia);
 		}
+	}
+	public File getFile() {
+		return file;
+	}
+	public void setFile(File file) {
+		this.file = file;
 	}
 
 }

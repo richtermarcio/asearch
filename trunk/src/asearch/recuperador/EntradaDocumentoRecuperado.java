@@ -14,6 +14,6 @@ public class EntradaDocumentoRecuperado {
 	public double relevancia;
 	
 	public String toString() {
-		return artigo+" ## " + relevancia + "\n";
+		return relevancia + " ## " + artigo.getTitulo() + " " + artigo.getAutor()+ " ==> " + artigo.getNomeArquivo(); //;
 	}
 }

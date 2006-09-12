@@ -113,6 +113,7 @@ public class Preparador {
 
 			PDDocumentInformation info = pdf.getDocumentInformation();
 			artigo.setAssunto(info.getSubject());
+			artigo.setFile(arquivo);
 			artigo.setAutor(info.getAuthor());
 
 			// TODO verificar se esses toString em datas vão formatá-las.

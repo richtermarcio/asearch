@@ -1,10 +1,9 @@
 package asearch.gui;
+
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -20,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import java.awt.event.*;
 
 import asearch.Fachada;
 import asearch.recuperador.EntradaDocumentoRecuperado;
@@ -29,13 +29,13 @@ public class TelaPrincipal extends JFrame {
     // meus atributos
     String palavraChave = "";
     String caminhoArquivo = "";
-//    String[] resultado = {"artigo 1", "artigo 2", "artigo 3", "artigo 4",
-//                         "artigo 5",
-//                         "artigo 6", "artigo 7", "artigo 8", "artigo 9",
-//                         "artigo 10", "artigo 11", "artigo 12",
-//                         "artigo 13", "artigo 14", "artigo 15", "artigo 16",
-//                         "artigo 17", "artigo 18", "artigo 19", "artigo 20"};
-//    String arquivoParaAbrir = "";
+
+    //String[] resultado = {"artigo 1", "artigo 2", "artigo 3", "artigo 4",
+    //                     "artigo 5",
+    //                    "artigo 6", "artigo 7", "artigo 8", "artigo 9",
+    //                     "artigo 10", "artigo 11", "artigo 12",
+    //                     "artigo 13", "artigo 14", "artigo 15", "artigo 16",
+    //                     "artigo 17", "artigo 18", "artigo 19", "artigo 20"};
 
     JPanel contentPane;
     JLabel statusBar = new JLabel();
@@ -84,7 +84,10 @@ public class TelaPrincipal extends JFrame {
             TelaPrincipal_jButtonBuscarArquivo_actionAdapter(this));
         jButtonSimilaridadeOK.addActionListener(new
             TelaPrincipal_jButtonSimilaridadeOK_actionAdapter(this));
-        contentPane.add(statusBar, BorderLayout.SOUTH);
+        jTextFieldPalavraChave.addActionListener(new
+            TelaPrincipal_jTextFieldPalavraChave_actionAdapter(this));
+        jTextFieldSimilaridade.addActionListener(new TelaPrincipal_jTextFieldSimilaridade_actionAdapter(this));
+    contentPane.add(statusBar, BorderLayout.SOUTH);
 
         jTextFieldPalavraChave.setText("");
         jTextFieldPalavraChave.setBounds(new Rectangle(22, 30, 200, 21));
@@ -116,11 +119,22 @@ public class TelaPrincipal extends JFrame {
         jLabel3.setBounds(new Rectangle(411, 161, 53, 15));
 
         jListResultados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        MouseListener mouseListenerListResultados = new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    Object selecionado = jListResultados.getSelectedValue();
+                    abreArtigo(selecionado);
+                }
+            }
+        };
+        jListResultados.addMouseListener(mouseListenerListResultados);
 
         jScrollPane = new JScrollPane(jListResultados);
         jScrollPane.setBounds(new Rectangle(24, 25, 761, 246));
-        jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.
+                                                 HORIZONTAL_SCROLLBAR_ALWAYS);
+        jScrollPane.setVerticalScrollBarPolicy(JScrollPane.
+                                               VERTICAL_SCROLLBAR_ALWAYS);
 
         jButtonAbrirArquivo.setBounds(new Rectangle(317, 289, 165, 21));
         jButtonAbrirArquivo.setText("Abrir arquivo selecionado");
@@ -141,7 +155,36 @@ public class TelaPrincipal extends JFrame {
 
     }
 
-    //Overridden so we can exit when window is closed
+    // recebe o artigo selecionado para abrir
+    private void abreArtigo(Object artigo) {
+        //String arquivoParaAbrir = artigo.toString();
+        //JOptionPane.showMessageDialog(this, arquivoParaAbrir, "Abrir", JOptionPane.PLAIN_MESSAGE);
+
+       EntradaDocumentoRecuperado entrada = (EntradaDocumentoRecuperado) artigo;
+       try {
+			System.out.println(entrada.artigo.getFile().getCanonicalPath());
+			try {
+				Runtime.getRuntime().exec(
+						"C:\\Program Files\\Adobe\\Acrobat 6.0\\Reader\\AcroRd32.exe "
+								+ entrada.artigo.getFile().getCanonicalPath());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				try {
+					Runtime.getRuntime().exec(
+							"c:\\Program Files\\Adobe\\Acrobat 7.0\\Reader\\AcroRd32.exe "
+									+ entrada.artigo.getFile()
+											.getCanonicalPath());
+				} catch (IOException e2) {
+					e2.printStackTrace();
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
+    // Overridden so we can exit when window is closed
     protected void processWindowEvent(WindowEvent e) {
         super.processWindowEvent(e);
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
@@ -153,37 +196,27 @@ public class TelaPrincipal extends JFrame {
         this.palavraChave = this.jTextFieldPalavraChave.getText();
         if (this.palavraChave.length() <= 2) {
             JOptionPane.showMessageDialog(this,
-                "Informe uma palavra-chave com tamanho maior que 2",
+                                          "Informe uma palavra-chave com tamanho maior que 2",
                                           "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
-        	try {
-				Collection<EntradaDocumentoRecuperado> resultado = Fachada.consultaQuery(this.palavraChave);
-	            this.jListResultados.setListData(resultado.toArray());
-			} catch (IOException e1) {
-				e1.printStackTrace();
-	            this.jListResultados.setListData(new Object[0]);
-			}
+            try {
+                Collection <EntradaDocumentoRecuperado> resultado = Fachada.consultaQuery(this.palavraChave);
+                this.jListResultados.setListData(resultado.toArray());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+                this.jListResultados.setListData(new Object[0]);
+            }
         }
     }
 
     void jButtonAbrirArquivo_actionPerformed(ActionEvent e) {
         if (this.jListResultados.isSelectionEmpty()) {
             JOptionPane.showMessageDialog(this,
-                "Selecione um artigo para ser aberto.",
+                                          "Selecione um artigo para ser aberto.",
                                           "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
             Object selecionado = this.jListResultados.getSelectedValue();
-//            this.arquivoParaAbrir = selecionado.toString();
-//            JOptionPane.showMessageDialog(this, this.arquivoParaAbrir,
-//                                          "Abrir", JOptionPane.PLAIN_MESSAGE);
-            
-            EntradaDocumentoRecuperado entrada = (EntradaDocumentoRecuperado)selecionado;
-            try {
-            	System.out.println(entrada.artigo.getFile().getCanonicalPath());
-				Runtime.getRuntime().exec("C:\\Program Files\\Adobe\\Acrobat 6.0\\Reader\\AcroRd32.exe " + entrada.artigo.getFile().getCanonicalPath());
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+            this.abreArtigo(selecionado);
         }
     }
 
@@ -193,6 +226,9 @@ public class TelaPrincipal extends JFrame {
             File arquivo = chooser.getSelectedFile();
             this.caminhoArquivo = arquivo.getAbsolutePath();
             this.jTextFieldSimilaridade.setText(this.caminhoArquivo);
+
+            this.jButtonBuscarArquivo.requestFocus(false);
+            this.jTextFieldSimilaridade.requestFocus(true);
         }
     }
 
@@ -200,18 +236,52 @@ public class TelaPrincipal extends JFrame {
         this.caminhoArquivo = this.jTextFieldSimilaridade.getText();
         if (this.caminhoArquivo.equals("")) {
             JOptionPane.showMessageDialog(this,
-                "Selecione um arquivo para ser comparado.",
+                                          "Selecione um arquivo para ser comparado.",
                                           "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
-        	try {
-				Collection<EntradaDocumentoRecuperado> resultado = Fachada.consultaArquivo(this.caminhoArquivo);
-	            this.jListResultados.setListData(resultado.toArray());
-			} catch (IOException e1) {
-				e1.printStackTrace();
-	            this.jListResultados.setListData(new Object[0]);
-			}
+            try {
+                Collection <EntradaDocumentoRecuperado> resultado = Fachada.consultaArquivo(this.caminhoArquivo);
+                this.jListResultados.setListData(resultado.toArray());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+                this.jListResultados.setListData(new Object[0]);
+            }
         }
     }
+
+    void jTextFieldPalavraChave_actionPerformed(ActionEvent e) {
+        this.palavraChave = this.jTextFieldPalavraChave.getText();
+        if (this.palavraChave.length() <= 2) {
+            JOptionPane.showMessageDialog(this,
+                                          "Informe uma palavra-chave com tamanho maior que 2",
+                                          "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else {
+            try {
+                Collection <EntradaDocumentoRecuperado> resultado = Fachada.consultaQuery(this.palavraChave);
+                this.jListResultados.setListData(resultado.toArray());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+                this.jListResultados.setListData(new Object[0]);
+            }
+        }
+    }
+
+  void jTextFieldSimilaridade_actionPerformed(ActionEvent e) {
+      this.caminhoArquivo = this.jTextFieldSimilaridade.getText();
+      if (this.caminhoArquivo.equals("")) {
+          JOptionPane.showMessageDialog(this,
+                                        "Selecione um arquivo para ser comparado.",
+                                        "Aviso", JOptionPane.WARNING_MESSAGE);
+      } else {
+          try {
+              Collection <EntradaDocumentoRecuperado> resultado = Fachada.consultaArquivo(this.caminhoArquivo);
+              this.jListResultados.setListData(resultado.toArray());
+          } catch (IOException e1) {
+              e1.printStackTrace();
+              this.jListResultados.setListData(new Object[0]);
+          }
+      }
+  }
 }
 
 class TelaPrincipal_jButtonPalavraChaveOK_actionAdapter implements java.awt.
@@ -264,4 +334,28 @@ class TelaPrincipal_jButtonSimilaridadeOK_actionAdapter implements java.awt.
     public void actionPerformed(ActionEvent e) {
         adaptee.jButtonSimilaridadeOK_actionPerformed(e);
     }
+}
+
+class TelaPrincipal_jTextFieldPalavraChave_actionAdapter implements java.awt.
+    event.ActionListener {
+    TelaPrincipal adaptee;
+
+    TelaPrincipal_jTextFieldPalavraChave_actionAdapter(TelaPrincipal adaptee) {
+        this.adaptee = adaptee;
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        adaptee.jTextFieldPalavraChave_actionPerformed(e);
+    }
+}
+
+class TelaPrincipal_jTextFieldSimilaridade_actionAdapter implements java.awt.event.ActionListener {
+  TelaPrincipal adaptee;
+
+  TelaPrincipal_jTextFieldSimilaridade_actionAdapter(TelaPrincipal adaptee) {
+    this.adaptee = adaptee;
+  }
+  public void actionPerformed(ActionEvent e) {
+    adaptee.jTextFieldSimilaridade_actionPerformed(e);
+  }
 }

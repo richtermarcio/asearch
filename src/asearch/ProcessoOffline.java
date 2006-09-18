@@ -26,39 +26,58 @@ public class ProcessoOffline {
 	private static void end() {
 		after = System.currentTimeMillis();
 		long diff = (after - before);
-		System.out.println(""+ (diff/1000.0));
+		
+		System.out.println("[" +   Runtime.getRuntime().freeMemory() / 1024.0 + " MB ]"+ (diff/1000.0));
 		after = before = 0;
+		
+		
+		System.gc();
 	}
 	
-	public static void indexarDiretorio(File dir, boolean subdirs) {
+	private static boolean changed = false;
+	public static void indexarDiretorio(File dir, String baseFile, boolean subdirs) {
 		
 		System.out.println("indexando diretório " + dir.getAbsolutePath());
 		if (dir.isDirectory()) {
 			String[] files = dir.list();
-			System.out.println(files.length + " entries.");
-			for (String str : files) {
-				System.out.println("\tfile: " + str);
-				File file = new File(dir, str);
-				if (file.isDirectory() && subdirs) {
-					indexarDiretorio(file, subdirs);
-				} else if (file.exists() && file.getName().endsWith(".pdf")) { // somente pdfs
+			if (files != null) {
+				System.out.println(files.length + " entries.");
+				for (String str : files) {
+					System.out.println("\tfile: " + str);
+					File file = new File(dir, str);
+					if (file.isDirectory() && subdirs) {
+						indexarDiretorio(file, baseFile, subdirs);
+					} else if (file.exists() && file.getName().endsWith(".pdf")) { // somente
+																					// pdfs
+						try {
+							String s = file.getName();
+							System.out.println("\t\tperparando \"" + s + "\"");
+
+							start();
+							Artigo artigo = Preparador.prepararArtigo(file
+									.getAbsolutePath());
+							end();
+
+							System.out.println("\t\tindexando \"" + s + "\"");
+							start();
+							Indexador.indexarArtigo(artigo);
+							end();
+
+							System.out.println("\n");
+							changed = true;
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				
+				if (changed) {
+					changed = false; 
 					try {
-						String s = file.getName();
-						System.out.println("\t\tperparando \"" + s + "\"");
-						
-						start();
-						Artigo artigo = Preparador.prepararArtigo(file.getAbsolutePath());
-						end();
-						
-						System.out.println("\t\tindexando \"" + s + "\"");
-						start();
-						Indexador.indexarArtigo(artigo);
-						end();
-						
-						System.out.println("\n");
+						Indexador.salvarBaseIndices(baseFile);
 					} catch (IOException e) {
 						e.printStackTrace();
-					}					
+					}
 				}
 			}
 		}
@@ -69,9 +88,9 @@ public class ProcessoOffline {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
-		indexarDiretorio(new File("C:\\temp\\maas\\asearch_svn\\pdfs"), true);
-		Indexador.salvarBaseIndices("base2.asr");
-		analisarBase("base2.asr");
+		changed = false;
+		indexarDiretorio(new File("D:\\"), "base.asr", true);
+		analisarBase("base.asr");
 	}
 	
 	

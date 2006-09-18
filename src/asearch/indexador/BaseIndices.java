@@ -53,6 +53,7 @@ public class BaseIndices implements Serializable {
 
 			artigo.setFrequenciaTermoMaisFrequente(maxFreq);
 			artigos.add(artigo);
+			artigo.setConteudoPreparado(null);
 		}
 	} 
 	

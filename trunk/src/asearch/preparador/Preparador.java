@@ -23,6 +23,7 @@ public class Preparador {
 		File arquivoPDF = new File(caminhoPDF);
 		Artigo artigo = lerArtigo(arquivoPDF);
 		eliminarStopWordsFazStem(artigo);
+//		artigo.setConteudoPreparado(null);
 		return artigo;
 	}
 
@@ -31,6 +32,7 @@ public class Preparador {
 		Artigo consultaArtigo = new Artigo();
 		consultaArtigo.setConteudo(consulta);
 		eliminarStopWordsFazStem(consultaArtigo);
+//		consultaArtigo.setConteudoPreparado(null);
 		return consultaArtigo;
 	}
 

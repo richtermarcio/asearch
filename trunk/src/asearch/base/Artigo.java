@@ -27,7 +27,7 @@ public class Artigo implements Serializable {
 	private String trapped = "";
 	private String separadorPalavras = " ";
 	private String titulo = "";
-	private Collection<String> conteudoPreparado;
+	private transient Collection<String> conteudoPreparado;
 	private Collection<OcorrenciaTermoDocumento> palavras = new HashSet<OcorrenciaTermoDocumento>();
 	
 	public String getAssunto() {

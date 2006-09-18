@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.pdfbox.exceptions.CryptographyException;
@@ -21,7 +22,7 @@ public class Preparador {
 	public static Artigo prepararArtigo(String caminhoPDF) throws IOException {
 		File arquivoPDF = new File(caminhoPDF);
 		Artigo artigo = lerArtigo(arquivoPDF);
-		eliminarStopWords(artigo);
+		eliminarStopWordsFazStem(artigo);
 		return artigo;
 	}
 
@@ -29,7 +30,7 @@ public class Preparador {
 	public static Artigo prepararConsulta(String consulta) throws IOException {
 		Artigo consultaArtigo = new Artigo();
 		consultaArtigo.setConteudo(consulta);
-		eliminarStopWords(consultaArtigo);
+		eliminarStopWordsFazStem(consultaArtigo);
 		return consultaArtigo;
 	}
 
@@ -37,7 +38,7 @@ public class Preparador {
 	// coloca o conteúdo filtrado na propriedade conteudoPreparado
 	// do mesmo Artigo.
 
-	private static void eliminarStopWords(Artigo artigo) {
+	private static void eliminarStopWordsFazStem(Artigo artigo) {
 
 		String[] arrayPalavrasPDF = artigo.getConteudo().split(
 				artigo.getSeparadorPalavras());
@@ -78,6 +79,7 @@ public class Preparador {
 				}
 
 				if (!ehStopWord && !ehMenorQue2 && !ehVazio) {
+					palavraPDFSplited[i] = PorterStemmer.stem(palavraPDFSplited[i]);
 					arrayListPalavrasPDF.add(palavraPDFSplited[i]);
 				}
 			}
@@ -156,8 +158,13 @@ public class Preparador {
 	public static void main(String[] args) {
 		try {
 			Artigo artigo = Preparador
-					.prepararArtigo("C://Temp//bf//asearch//minweb//pdfs//teste.pdf");
-			System.out.println("" + artigo);
+					.prepararArtigo("C://asearch//pdfs//teste.pdf");
+			//System.out.println("" + artigo);
+			Collection palavras = artigo.getConteudoPreparado();
+			for (Iterator iter = palavras.iterator(); iter.hasNext();) {
+				String element = (String) iter.next();
+				System.out.println(element);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

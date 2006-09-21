@@ -5,10 +5,12 @@ package asearch.indexador;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Hashtable;
 
 import asearch.base.Artigo;
+import asearch.recuperador.EntradaDocumentoRecuperado;
 
 
 /**
@@ -50,13 +52,13 @@ public class BaseIndices implements Serializable {
 					maxFreq = freq;
 				}
 			}
-
+			
 			artigo.setFrequenciaTermoMaisFrequente(maxFreq);
 			artigos.add(artigo);
 			artigo.setConteudoPreparado(null);
 		}
 	} 
-	
+
 	//du bist schön  
 	public EntradaBaseIndice getPalavra(String palavra) {
 		EntradaBaseIndice entrada = (EntradaBaseIndice) hashEntradas.get(palavra); 

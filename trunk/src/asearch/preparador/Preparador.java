@@ -42,6 +42,7 @@ public class Preparador {
 
 	private static void eliminarStopWordsFazStem(Artigo artigo) {
 
+//		System.out.println(artigo.getFile() + "\n" + artigo.getConteudo());
 		String[] arrayPalavrasPDF = artigo.getConteudo().split(
 				artigo.getSeparadorPalavras());
 		Collection<String> arrayListPalavrasPDF = new CopyOnWriteArrayList<String>(
@@ -61,6 +62,7 @@ public class Preparador {
 				boolean ehStopWord = false;
 				boolean ehMenorQue2 = false;
 				boolean ehVazio = false;
+				boolean ehSohA  = false;
 
 				palavraPDFSplited[i] = palavraPDFSplited[i].replaceAll("\\d+", "");
 
@@ -71,6 +73,14 @@ public class Preparador {
 				if (palavraPDFSplited[i].length() <= 2) {
 					ehMenorQue2 = true;
 				}
+
+				ehSohA = true;
+				for(int j=0;j<palavraPDFSplited[i].length();++j) {
+					if (palavraPDFSplited[i].charAt(j) != 'a') {
+						ehSohA = false;
+						break;
+					}
+				}
 				
 				// verifica se é stop word.
 				for (String stopWord : stopWords) {
@@ -80,7 +90,7 @@ public class Preparador {
 					}
 				}
 
-				if (!ehStopWord && !ehMenorQue2 && !ehVazio) {
+				if (!ehStopWord && !ehMenorQue2 && !ehVazio && !ehSohA) {
 					palavraPDFSplited[i] = PorterStemmer.stem(palavraPDFSplited[i]);
 					arrayListPalavrasPDF.add(palavraPDFSplited[i]);
 				}

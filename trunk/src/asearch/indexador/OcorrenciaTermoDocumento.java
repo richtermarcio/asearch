@@ -58,7 +58,7 @@ public class OcorrenciaTermoDocumento implements Serializable  {
 	}
 	
 	public String toString() {
-		return "(" + termo.getTermo() + ";" + artigo.getNomeArquivo() + ";freq=" + frequenciaDaPalavraNoDocumento + ";peso=" + peso + ")";
+		return "\n(" + termo.getTermo() + ";" + artigo.getNomeArquivo() + ";freq=" + frequenciaDaPalavraNoDocumento + ";peso=" + peso + ")";
 	}
 
 	public double getPeso() {

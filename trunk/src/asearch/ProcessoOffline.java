@@ -63,6 +63,8 @@ public class ProcessoOffline {
 							Indexador.indexarArtigo(artigo);
 							end();
 
+//							Indexador.atualizarPesos();
+//							System.out.println("indexado:\n" + artigo + "\n");
 							System.out.println("\n");
 							changed = true;
 						} catch (IOException e) {
@@ -89,8 +91,23 @@ public class ProcessoOffline {
 	 */
 	public static void main(String[] args) throws Exception {
 		changed = false;
-		indexarDiretorio(new File("D:\\"), "base.asr", true);
-		analisarBase("base.asr");
+		
+		if (args.length == 2) {
+			File fileBase = new File(args[0]);
+			if (fileBase.exists()) {
+				Indexador.carregarBaseIndices(args[0]);
+			} else {
+				Indexador.salvarBaseIndices(args[0]);
+			}
+			
+			indexarDiretorio(new File(args[1]), args[0], true);
+			analisarBase(args[0]);
+		} else if (args.length == 1) {
+			analisarBase(args[0]);
+		} else {
+			System.out.println("uso: ProcessoOffline [[base] [root dir]]");
+		}
+		
 	}
 	
 	

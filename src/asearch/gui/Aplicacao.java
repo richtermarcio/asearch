@@ -34,15 +34,20 @@ public class Aplicacao {
   }
   //Main method
   public static void main(String[] args) throws IOException, ClassNotFoundException {
-	Indexador.carregarBaseIndices("base2.asr");	
-	Indexador.atualizarPesos();
+	  if (args.length == 1) {
+			Indexador.carregarBaseIndices(args[0]);
+			Indexador.atualizarPesos();
 
-	try {
-      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-    new Aplicacao();
+			try {
+				UIManager.setLookAndFeel(UIManager
+						.getSystemLookAndFeelClassName());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			new Aplicacao();
+		} else {
+			System.out.println("uso: Aplicacao [base]");
+		}
+
   }
 }

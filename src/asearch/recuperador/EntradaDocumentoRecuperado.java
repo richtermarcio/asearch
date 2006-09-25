@@ -3,6 +3,8 @@
  */
 package asearch.recuperador;
 
+import java.io.IOException;
+
 import asearch.base.Artigo;
 
 /**
@@ -14,6 +16,10 @@ public class EntradaDocumentoRecuperado {
 	public double relevancia;
 	
 	public String toString() {
-		return relevancia + " ## " + artigo.getTitulo() + " " + artigo.getAutor()+ " ==> " + artigo.getNomeArquivo(); //;
+		try {
+			return artigo.getFile().getCanonicalPath() + " [" + relevancia +"]";
+		} catch (IOException e) {
+			return "IOE";
+		}
 	}
 }
